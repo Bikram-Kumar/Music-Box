@@ -1,15 +1,16 @@
 import {
     KeyManager
 } from "./KeyManager.js";
-
+import {
+    GUIHandler
+} from "../lib/JSUI/index.js";
 
 window.onload = main;
 window.keysContainer = window.document.getElementById('keys-container');
 window.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-
 function main() {
-    window.addEventListener('click', ()=> {
 
+    window.addEventListener('click', () => {
         var frqPrev = 27.5;
         var keys = [{}, {}, {}, {}, {}, {}, {}, {}, {}];
         for (let i = 0; i < 88; i++) {
@@ -72,18 +73,30 @@ function main() {
 
             Object.defineProperty(keys[octaveNum], keyName, {
                 value: new KeyManager(frqPrev, keyType)
-                });
+        });
 
-            frqPrev = frqCur;
-        }
+        frqPrev = frqCur;
+    }
         // end of for loop
-        
+
         for (let i = 1; i < 9; i++) {
             keys[i]["C"].key.innerHTML = `<span>C${i}</span>`;
         }
 
     },
-        {
-            once: true
+    {
+        once: true
+    });
+    
+var bodyGUIHandler = new GUIHandler();
+if (window.innerWidth < window.innerHeight) {
+        bodyGUIHandler.confirm("For better experience, you should use Music Box in landscape mode. Do you want to rotate?", (confirmed) => {
+            if (confirmed) {
+                window.document.body.requestFullscreen();
+                window.screen.orientation.lock("landscape");
+            }
         });
+}
+
+
 }
